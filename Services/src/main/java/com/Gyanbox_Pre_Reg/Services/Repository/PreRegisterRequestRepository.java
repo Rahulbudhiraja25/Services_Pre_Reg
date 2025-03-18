@@ -5,10 +5,14 @@ import com.Gyanbox_Pre_Reg.Services.DTO.PreRegisterRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 public interface PreRegisterRequestRepository extends JpaRepository<PreRegisterRequest, Long> {
 
-        boolean existsByEmailId(String emailId); // ✅ Use Spring Data JPA method
+    Optional<PreRegisterRequest> findByEmailId(String email); // ✅ Corrected method signature
+
+    boolean existsByEmailId(String emailId); // ✅ Valid method to check if email exists
     }
 
