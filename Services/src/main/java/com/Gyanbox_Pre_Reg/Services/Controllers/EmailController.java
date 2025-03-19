@@ -1,13 +1,11 @@
 package com.Gyanbox_Pre_Reg.Services.Controllers;
 import com.Gyanbox_Pre_Reg.Services.DTO.PreRegisterRequest;
+import com.Gyanbox_Pre_Reg.Services.DTO.VerificationRequest;
 import com.Gyanbox_Pre_Reg.Services.Repository.PreRegisterRequestRepository;
 import com.Gyanbox_Pre_Reg.Services.Services.EmailService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.util.Optional;
@@ -37,13 +35,13 @@ public class EmailController {
     }
 
 
-    @GetMapping("/verify/mail")
-    public String verifyMail(@RequestParam String email,String otp){
+    @PostMapping("/verify/mail")
+    public String verifyMail(@RequestBody VerificationRequest request){
         boolean result;
-        result=emailService.isOtpValid(email,otp);
+        result=emailService.isOtpValid(request.getEmail(), request.getOtp());
         if(result==true){
 
-            Optional<PreRegisterRequest> userOptional = preRegisterRequestRepository.findByEmailId(email);
+            Optional<PreRegisterRequest> userOptional = preRegisterRequestRepository.findByEmailId(request.getEmail());
                     if(userOptional.isPresent()){
                         PreRegisterRequest user = userOptional.get();
                         user.setVerification(true); // ✅ Update verification flag
